@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Recorder Studio</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="studio-shell">
+      <div id="lightningStrike" class="lightning-strike" aria-hidden="true"></div>
+
+      <section class="stage" aria-label="Recording preview">
+        <div class="desktop-frame">
+          <video id="screenPreview" class="screen-preview" autoplay muted playsinline></video>
+          <div id="screenEmpty" class="empty-state">
+            <strong>Select a source</strong>
+            <span>Use the panel to capture a desktop, window, or browser tab.</span>
+          </div>
+        </div>
+
+        <div id="cameraPreview" class="camera-preview">
+          <video id="cameraVideo" class="camera-video" autoplay muted playsinline></video>
+        </div>
+        <div id="centerCross" class="center-cross" aria-hidden="true" hidden></div>
+      </section>
+
+      <div id="recordingIndicator" class="recording-indicator" aria-label="Recording off" role="status"></div>
+
+      <aside id="controlPanel" class="control-panel" aria-label="Recorder controls">
+        <div class="panel-header">
+          <div>
+            <h1>Recorder</h1>
+            <p id="statusText">Idle</p>
+          </div>
+          <button id="hidePanelButton" class="icon-button" type="button" title="Hide panel" aria-label="Hide panel">×</button>
+        </div>
+
+        <section class="panel-section debug-angles">
+          <h2>Media rotation</h2>
+          <label>
+            <span>X</span>
+            <input id="tiltXInput" type="number" min="-45" max="45" step="1" value="0">
+          </label>
+          <label>
+            <span>Y</span>
+            <input id="tiltYInput" type="number" min="-45" max="45" step="1" value="0">
+          </label>
+          <label>
+            <span>Z</span>
+            <input id="tiltZInput" type="number" min="-45" max="45" step="1" value="0">
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2>Source</h2>
+          <button id="screenButton" type="button">Choose source</button>
+          <p id="screenLabel">No source selected</p>
+        </section>
+
+        <section class="panel-section">
+          <h2>Camera source</h2>
+          <button id="cameraButton" type="button">Start camera</button>
+          <p id="cameraLabel">Camera off</p>
+        </section>
+
+        <section class="panel-section">
+          <h2>Recording Subject</h2>
+          <label class="check-row">
+            <input id="subjectSourceToggle" type="checkbox" checked>
+            <span>Source</span>
+          </label>
+          <label class="check-row">
+            <input id="subjectAudioToggle" type="checkbox" checked>
+            <span>Audio</span>
+          </label>
+          <button id="subjectSourceButton" type="button">Choose subject</button>
+          <video id="subjectPanelPreview" class="source-panel-preview" autoplay muted playsinline hidden></video>
+          <p id="subjectLabel">No subject selected</p>
+          <p id="audioLabel">Audio enabled</p>
+        </section>
+
+        <section class="panel-section">
+          <h2>Recording</h2>
+          <div class="record-grid">
+            <button id="recordButton" type="button">Rec</button>
+            <button id="pauseButton" type="button" disabled>Pause</button>
+            <button id="stopButton" type="button" disabled>Stop</button>
+            <button id="playButton" type="button" disabled>Play</button>
+          </div>
+          <video id="playback" class="playback" controls hidden></video>
+        </section>
+
+        <section class="panel-section">
+          <h2>Debug</h2>
+          <label class="check-row">
+            <input id="centerCrossToggle" type="checkbox">
+            <span>Show center cross</span>
+          </label>
+        </section>
+
+        <section class="panel-section effects-help" aria-label="Help on effects">
+          <h2>Help on Effects</h2>
+          <ul>
+            <li><kbd>Shift</kbd> + <kbd>Click</kbd> centers the clicked point in the media pane.</li>
+            <li><kbd>Shift</kbd> + <kbd>S</kbd> shakes the media pane for 4 seconds.</li>
+            <li><kbd>Shift</kbd> + <kbd>R</kbd> rotates the media pane in 3D.</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+  </body>
+</html>
