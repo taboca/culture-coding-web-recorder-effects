@@ -1,8 +1,6 @@
 # Screencasting studio using WebRTC made with Codex and GPT 5.5 
 
-Web Recorder Studio is a browser-based demonstration for recording a selected screen source with optional webcam and audio capture. It was built as a culture-coding session around memo-driven development, visual requirements, and interactive polish for an OpenAI Developers Gallery submission.
-
-This project is also a demonstration of building with Codex and GPT-5.5. The companion memo, [README-memo-010.md](./README-memo-010.md), documents the work chapter by chapter so others can study how the app was shaped through prompts, observations, post-mortems, and implementation passes.
+Web Recorder Studio is a browser-based demonstration for recording a selected screen source with optional webcam and audio capture. It was built using Visual Code and Codex with GPT 5.5 medium model. I have used a memo-driven development, through memos, keeping track of the development. We have used visual requirements, using a print.  This project is also a demonstration of building with Codex and GPT-5.5. The companion memo, [README-memo-010.md](./README-memo-010.md), documents the work chapter by chapter so others can study how the app was shaped through prompts, observations, post-mortems, and implementation passes.
 
 ## Building process introduction
 
@@ -10,13 +8,17 @@ It started with a use case and a reference to the underlying browser support. Th
 
 The app uses WebRTC browser APIs for screen, camera, and microphone capture, plus CSS/JavaScript effects for media panel translation, zoom, rotation, shake, and a lightning sweep.
 
-## Demo video
+![Web Recorder Studio screenshot](./image.png)
+
+## Celebration demo video
 
 https://www.youtube.com/watch?v=knGQcggyCo4
 
 ## Live page
 
 https://taboca.github.io/culture-coding-web-recorder-effects/
+
+The UI has three capture sections. The first section selects the source shown in the main screen area. The second section controls the camera overlay. The third section, Recording Subject, selects the video source that will be recorded; for the intended demo, choose the page itself or the browser pane. When picking the browser pane, use full screen for the cleanest result.
 
 ## Running locally
 
