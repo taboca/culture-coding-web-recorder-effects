@@ -25,9 +25,6 @@ const centerCrossToggle = document.querySelector('#centerCrossToggle');
 const subjectPanelPreview = document.querySelector('#subjectPanelPreview');
 const recordingIndicator = document.querySelector('#recordingIndicator');
 const lightningStrike = document.querySelector('#lightningStrike');
-const tiltXInput = document.querySelector('#tiltXInput');
-const tiltYInput = document.querySelector('#tiltYInput');
-const tiltZInput = document.querySelector('#tiltZInput');
 
 let screenStream;
 let cameraStream;
@@ -66,6 +63,11 @@ function isRotateShortcut(event) {
   return event.shiftKey && (key === 'r' || event.code === 'KeyR');
 }
 
+function isRecordToggleShortcut(event) {
+  const key = event.key?.toLowerCase();
+  return event.shiftKey && (key === 'e' || event.code === 'KeyE');
+}
+
 function isShakeShortcut(event) {
   const key = event.key?.toLowerCase();
   return event.shiftKey && (key === 's' || event.code === 'KeyS');
@@ -76,28 +78,22 @@ function isLightningShortcut(event) {
   return event.shiftKey && (key === 'l' || event.code === 'KeyL');
 }
 
-function randomTilt(maxDegrees = 5) {
-  return `${Math.random() * maxDegrees * 2 - maxDegrees}deg`;
-}
-
 function setTilt(x, y, z) {
   desktopFrame.style.setProperty('--tilt-x', `${x}deg`);
   desktopFrame.style.setProperty('--tilt-y', `${y}deg`);
   desktopFrame.style.setProperty('--tilt-z', `${z}deg`);
 }
 
-function syncTiltInputs(x, y, z) {
-  tiltXInput.value = x.toFixed(1).replace(/\.0$/, '');
-  tiltYInput.value = y.toFixed(1).replace(/\.0$/, '');
-  tiltZInput.value = z.toFixed(1).replace(/\.0$/, '');
-}
+function getClickTilt(clickX, clickY, width, height) {
+  const relativeX = (clickX - width / 2) / (width / 2);
+  const relativeY = (clickY - height / 2) / (height / 2);
+  const maxTilt = 7;
 
-function applyTiltInputs() {
-  setTilt(
-    Number.parseFloat(tiltXInput.value) || 0,
-    Number.parseFloat(tiltYInput.value) || 0,
-    Number.parseFloat(tiltZInput.value) || 0
-  );
+  return {
+    x: relativeY * maxTilt,
+    y: relativeX * -maxTilt,
+    z: 0
+  };
 }
 
 function updateScreenPan() {
@@ -114,7 +110,6 @@ function resetScreenEffect() {
   desktopFrame.style.setProperty('--origin-x', '50%');
   desktopFrame.style.setProperty('--origin-y', '50%');
   setTilt(0, 0, 0);
-  syncTiltInputs(0, 0, 0);
   updateScreenPan();
 }
 
@@ -175,11 +170,8 @@ function centerMediaPoint(event) {
   screenPanY = renderedRect.height / 2 - clickY;
   screenZoom = 1.25;
   screenTargetActive = true;
-  const tiltX = Number.parseFloat(randomTilt());
-  const tiltY = Number.parseFloat(randomTilt());
-  const tiltZ = Number.parseFloat(randomTilt());
+  const { x: tiltX, y: tiltY, z: tiltZ } = getClickTilt(clickX, clickY, renderedRect.width, renderedRect.height);
   setTilt(tiltX, tiltY, tiltZ);
-  syncTiltInputs(tiltX, tiltY, tiltZ);
   updateScreenPan();
 }
 
@@ -483,9 +475,6 @@ hidePanelButton.addEventListener('click', () => togglePanel(false));
 centerCrossToggle.addEventListener('change', () => {
   centerCross.hidden = !centerCrossToggle.checked;
 });
-tiltXInput.addEventListener('input', applyTiltInputs);
-tiltYInput.addEventListener('input', applyTiltInputs);
-tiltZInput.addEventListener('input', applyTiltInputs);
 desktopFrame.addEventListener('click', centerMediaPoint);
 cameraPreview.addEventListener('pointerdown', startCameraDrag);
 cameraPreview.addEventListener('pointermove', dragCamera);
@@ -499,6 +488,29 @@ document.addEventListener(
       event.preventDefault();
       event.stopPropagation();
       togglePanel();
+    }
+  },
+  true
+);
+
+document.addEventListener(
+  'keydown',
+  async (event) => {
+    if (!isRecordToggleShortcut(event)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    try {
+      if (!recorder || recorder.state === 'inactive') {
+        await startRecording();
+        return;
+      }
+
+      togglePause();
+    } catch (error) {
+      setStatus('Recording unavailable');
+      setRecordingControls('idle');
     }
   },
   true
@@ -536,6 +548,17 @@ document.addEventListener(
     event.preventDefault();
     event.stopPropagation();
     triggerLightningStrike();
+  },
+  true
+);
+
+document.addEventListener(
+  'keyup',
+  (event) => {
+    if (isRecordToggleShortcut(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },
   true
 );

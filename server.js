@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 app.listen(port, () => {
   console.log(`Web Recorder Studio demo: http://localhost:${port}`);

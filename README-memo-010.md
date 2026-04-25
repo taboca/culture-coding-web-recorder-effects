@@ -177,7 +177,10 @@
 
 * Doc on gallery: https://openai.com/form/showcase-submission/
 * The main page should not show scrollbars.
+* For GitHub Pages, keep a static copy of the app at the repository root because Pages may not serve directly from `public/` in the intended setup.
 * `Shift+Click` should animate the media panel with translate, zoom, and a small rotation effect.
+* `Shift+Click` rotation should be calculated from the clicked point relative to center, with a maximum of `7deg` on `x` and `y`, and `0deg` on `z`.
+* The temporary rotation debug fields should be removed from the sidebar after validating the heuristic.
 * `Shift+L` should trigger a lightning strike effect: a quick diagonal gradient line passing from top-left to bottom-right and vanishing in about `0.2` seconds.
 
 ### Basic submission information
